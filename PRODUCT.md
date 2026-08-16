@@ -28,7 +28,7 @@ Prospective clients evaluate the company through its residential services, real 
 - Existing contact channels: phone and SMS at +1 (617) 909-3490 and email at info.camilascleaning@gmail.com.
 - Existing hours: Monday–Friday, 7:00 AM–6:00 PM; Saturday, 7:00 AM–3:00 PM; Sunday closed.
 - Existing service area language: Greater Boston and Massachusetts Region.
-- Residential services lead the home page. Office Cleaning and Post-Construction remain available with lower visual priority.
+- Residential services lead the home page. Post-Construction Cleaning is a frequently requested priority service and receives elevated placement; Office Cleaning remains available with lower visual priority.
 - The repository has no server-side form endpoint or third-party lead service. Consultation details may be validated in the browser and passed to the existing email channel without introducing an unapproved processor.
 - Do not claim insurance status, certifications, guarantees, employee screening practices, key policies, team-assignment policies, specific cities, prices, or technology that the client has not confirmed.
 
@@ -37,7 +37,7 @@ Prospective clients evaluate the company through its residential services, real 
 - Preserve the Camila's Cleaning name, logo, brand marks, authentic photography, contact information, hours, social profiles, and real client testimonials.
 - Voice: calm, discreet, precise, warm, and confident; communicate trust, consistency, privacy, personalization, and care.
 - Avoid promotional urgency, discount language, repeated “free quote” language, clichés centered on cleaning tools, and generic template aesthetics.
-- Binding visual direction from the client brief: sophisticated editorial composition, warm neutral foundation, discreet olive/taupe accents, elegant display typography, highly legible body copy, generous whitespace, large interior photography, restrained icons, and subtle motion.
+- Binding visual direction from the client brief: sophisticated editorial composition, warm neutral foundation, balanced deep-blue and sage-green brand accents, elegant display typography, highly legible body copy, generous whitespace, large interior photography, restrained icons, and subtle motion.
 
 ## Evidence on Hand
 
