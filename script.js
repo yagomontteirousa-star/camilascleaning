@@ -29,6 +29,7 @@
   }
 
   const reviewCarousel = document.querySelector('[data-review-carousel]');
+  const reviewToggle = document.querySelector('[data-review-toggle]');
   if (reviewCarousel) {
     const track = reviewCarousel.querySelector('.review-track');
     const sourceGroup = reviewCarousel.querySelector('.review-group');
@@ -40,8 +41,14 @@
       reviewCarousel.classList.add('is-ready');
 
       let carouselInView = true;
+      let userPaused = false;
       const syncCarouselMotion = () => {
         reviewCarousel.classList.toggle('is-paused', document.hidden || !carouselInView);
+        reviewCarousel.classList.toggle('is-user-paused', userPaused);
+        if (reviewToggle) {
+          reviewToggle.setAttribute('aria-pressed', String(userPaused));
+          reviewToggle.querySelector('span').textContent = userPaused ? 'Resume reviews' : 'Pause reviews';
+        }
       };
 
       if ('IntersectionObserver' in window) {
@@ -52,6 +59,10 @@
         carouselObserver.observe(reviewCarousel);
       }
 
+      reviewToggle?.addEventListener('click', () => {
+        userPaused = !userPaused;
+        syncCarouselMotion();
+      });
       document.addEventListener('visibilitychange', syncCarouselMotion);
       syncCarouselMotion();
     }
