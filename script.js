@@ -19,6 +19,110 @@
     }
   });
 
+  document.querySelectorAll('[data-checklist-accordion]').forEach((accordion) => {
+    const items = [...accordion.querySelectorAll('.checklist-item')];
+    items.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        items.forEach((otherItem) => {
+          if (otherItem !== item) otherItem.open = false;
+        });
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-supplies-carousel]').forEach((carousel) => {
+    const viewport = carousel.querySelector('[data-supplies-viewport]');
+    const cards = [...carousel.querySelectorAll('.supply-card')];
+    const previousButton = carousel.querySelector('[data-supplies-prev]');
+    const nextButton = carousel.querySelector('[data-supplies-next]');
+    const dotsContainer = carousel.querySelector('[data-supplies-dots]');
+    const status = carousel.querySelector('[data-supplies-status]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let visibleCards = 1;
+    let pageCount = cards.length;
+    let indicatorSpan = 1;
+    let currentPage = 0;
+    let interacting = false;
+    let resumeTimer;
+
+    const getGap = () => Number.parseFloat(getComputedStyle(viewport.querySelector('.supplies-track')).columnGap) || 0;
+    const getStep = () => (cards[0]?.getBoundingClientRect().width || viewport.clientWidth) + getGap();
+
+    const updateState = (page, announce = false) => {
+      currentPage = Math.max(0, Math.min(pageCount - 1, page));
+      const currentCard = currentPage * visibleCards;
+      const activeIndicator = Math.min(Math.floor(currentCard / indicatorSpan), dotsContainer.children.length - 1);
+      dotsContainer.querySelectorAll('button').forEach((dot, index) => {
+        dot.setAttribute('aria-current', String(index === activeIndicator));
+      });
+      const first = currentPage * visibleCards + 1;
+      const last = Math.min(first + visibleCards - 1, cards.length);
+      status.setAttribute('aria-live', announce ? 'polite' : 'off');
+      status.textContent = `${first}–${last} of ${cards.length}`;
+    };
+
+    const goToPage = (page, announce = true) => {
+      const wrappedPage = (page + pageCount) % pageCount;
+      const target = Math.min(wrappedPage * visibleCards * getStep(), viewport.scrollWidth - viewport.clientWidth);
+      viewport.scrollTo({ left: target, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+      updateState(wrappedPage, announce);
+    };
+
+    const buildDots = () => {
+      const step = getStep();
+      visibleCards = Math.max(1, Math.floor((viewport.clientWidth + getGap()) / step));
+      pageCount = Math.ceil(cards.length / visibleCards);
+      indicatorSpan = window.innerWidth <= 620 ? 4 : visibleCards;
+      const indicatorCount = Math.ceil(cards.length / indicatorSpan);
+      currentPage = Math.min(currentPage, pageCount - 1);
+      dotsContainer.replaceChildren();
+      for (let index = 0; index < indicatorCount; index += 1) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        const firstProduct = index * indicatorSpan + 1;
+        const lastProduct = Math.min(firstProduct + indicatorSpan - 1, cards.length);
+        dot.setAttribute('aria-label', `Show products ${firstProduct} through ${lastProduct}`);
+        dot.addEventListener('click', () => goToPage(Math.floor((index * indicatorSpan) / visibleCards)));
+        dotsContainer.append(dot);
+      }
+      updateState(currentPage);
+    };
+
+    const pauseTemporarily = () => {
+      interacting = true;
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(() => { interacting = false; }, 12000);
+    };
+
+    previousButton.addEventListener('click', () => { pauseTemporarily(); goToPage(currentPage - 1); });
+    nextButton.addEventListener('click', () => { pauseTemporarily(); goToPage(currentPage + 1); });
+    carousel.addEventListener('pointerenter', () => { interacting = true; });
+    carousel.addEventListener('pointerleave', () => { interacting = false; });
+    carousel.addEventListener('focusin', () => { interacting = true; });
+    carousel.addEventListener('focusout', () => { interacting = false; });
+    viewport.addEventListener('pointerdown', pauseTemporarily, { passive: true });
+    let scrollTimer;
+    viewport.addEventListener('scroll', () => {
+      window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(() => {
+        const cardIndex = Math.round(viewport.scrollLeft / getStep());
+        updateState(Math.floor(cardIndex / visibleCards));
+      }, 100);
+    }, { passive: true });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => { buildDots(); goToPage(currentPage, false); }, 150);
+    });
+
+    buildDots();
+    window.setInterval(() => {
+      if (!interacting && !document.hidden && !reducedMotion.matches) goToPage(currentPage + 1, false);
+    }, 8000);
+  });
+
   const video = document.querySelector('.work-gallery__video video');
   if (video && 'IntersectionObserver' in window) {
     const videoObserver = new IntersectionObserver(([entry]) => {
