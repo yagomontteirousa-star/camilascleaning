@@ -342,6 +342,25 @@ p{margin:0;color:var(--ink-soft)}
 .supplies-dots button[aria-current="true"]::before{background:var(--navy);transform:scale(1.35)}
 .supplies-status{min-width:96px;color:var(--ink-soft);font-size:.72rem;text-align:right}
 
+@media (min-width:861px){
+  .supplies-hero{padding-top:140px;padding-bottom:50px}
+  .supplies-hero h1{font-size:clamp(3.6rem,5.5vw,5rem)}
+  .supplies-hero .policy-hero__lead{margin-top:16px;line-height:1.65}
+  .supplies-page{padding-top:52px;padding-bottom:64px}
+  .supplies-intro{align-items:center;margin-bottom:32px}
+  .supplies-intro h2{font-size:clamp(2.6rem,4vw,4rem)}
+  .supplies-intro p{font-size:.92rem;line-height:1.6}
+  .supplies-intro p+p{margin-top:8px}
+  .supply-card{padding:14px 14px 18px}
+  .supply-card__image{height:175px;margin-bottom:16px}
+  .supply-card h3{font-size:.9rem;line-height:1.32}
+  .supplies-controls{margin-top:18px}
+}
+
+@media (min-width:1181px){
+  .supply-card{flex-basis:calc((100% - 72px)/5)}
+}
+
 @media (max-width:1100px){
   :root{--content:min(100% - 44px,980px)}
   .site-header{grid-template-columns:160px 1fr auto}

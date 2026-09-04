@@ -66,12 +66,12 @@
       const wrappedPage = (page + pageCount) % pageCount;
       const target = Math.min(wrappedPage * visibleCards * getStep(), viewport.scrollWidth - viewport.clientWidth);
       viewport.scrollTo({ left: target, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
-      updateState(wrappedPage, announce);
+      if (reducedMotion.matches) updateState(wrappedPage, announce);
     };
 
     const buildDots = () => {
       const step = getStep();
-      visibleCards = Math.max(1, Math.floor((viewport.clientWidth + getGap()) / step));
+      visibleCards = Math.max(1, Math.round((viewport.clientWidth + getGap()) / step));
       pageCount = Math.ceil(cards.length / visibleCards);
       indicatorSpan = window.innerWidth <= 620 ? 4 : visibleCards;
       const indicatorCount = Math.ceil(cards.length / indicatorSpan);
