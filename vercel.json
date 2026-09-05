@@ -1,0 +1,24 @@
+{
+  "redirects": [
+    {
+      "source": "/about",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/services",
+      "destination": "/#services",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/#consultation",
+      "permanent": true
+    },
+    {
+      "source": "/work-with-us",
+      "destination": "/#consultation",
+      "permanent": true
+    }
+  ]
+}
